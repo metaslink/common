@@ -5,6 +5,7 @@ const (
 	VendorH3C      = "25506"
 	VendorHuawei   = "2011"
 	VendorRuijie   = "4881"
+	VendorGeneral   = "0"
 )
 
 func NewMikrotikDevice() *SnmpDevice {
@@ -52,6 +53,17 @@ func NewRuijieDevice() *SnmpDevice {
 		VendorCode:         VendorRuijie,
 		SoftwareIdOid:      ".1.3.6.1.4.1.4881.1.1.10.2.56.1.1.20.0",
 		SnOid:              ".1.3.6.1.4.1.4881.1.1.10.2.56.1.1.20.0",
+		SystemNameOid:      ".1.3.6.1.2.1.1.5.0",
+		ModelOid:           ".1.3.6.1.2.1.1.1.0",
+		UptimeOid:          ".1.3.6.1.2.1.1.3.0",
+		IfOctetsMap:        nil,
+	}
+}
+
+func NewGeneralDevice() *SnmpDevice {
+	return &SnmpDevice{
+		VendorName:         "General",
+		VendorCode:         VendorGeneral,
 		SystemNameOid:      ".1.3.6.1.2.1.1.5.0",
 		ModelOid:           ".1.3.6.1.2.1.1.1.0",
 		UptimeOid:          ".1.3.6.1.2.1.1.3.0",

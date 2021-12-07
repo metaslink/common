@@ -212,7 +212,7 @@ func (c *SnmpV2Client) CollectDeviceSystemInfo(device *SnmpDevice) (err error) {
 		device.ModelOid,
 		device.UptimeOid,
 	}
-	if device.UseSnOid {
+	if device.UseSnOid &&  device.SnOid != "" {
 		oids = append(oids, device.SnOid)
 	}
 	rs, err := c.CollectOids(oids)
