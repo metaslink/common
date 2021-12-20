@@ -5,6 +5,8 @@ go 1.16
 require (
 	github.com/360EntSecGroup-Skylar/excelize v1.4.1
 	github.com/bwmarrin/snowflake v0.3.0
+	github.com/google/go-cmp v0.5.6 // indirect
+	github.com/google/uuid v1.1.2 // indirect
 	github.com/gosnmp/gosnmp v1.34.0
 	github.com/guonaihong/gout v0.2.10
 	github.com/hallidave/mibtool v0.2.0
@@ -12,7 +14,6 @@ require (
 	github.com/labstack/echo/v4 v4.6.1
 	github.com/labstack/gommon v0.3.1
 	github.com/montanaflynn/stats v0.6.6
-	github.com/olivere/elastic/v7 v7.0.29
 	github.com/op/go-logging v0.0.0-20160315200505-970db520ece7
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/sftp v1.13.4
@@ -27,4 +28,5 @@ require (
 	golang.org/x/text v0.3.7
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
+	gorm.io/gorm v1.22.4
 )
