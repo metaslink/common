@@ -156,6 +156,18 @@ func (f *WebForm) GetInt64Val(name string, defval int64) int64 {
 	return v
 }
 
+func (f *WebForm) GetTime(name string, defval time.Time) time.Time {
+	_time := f.GetVal(name)
+	if _time == "" {
+		return defval
+	}
+	t, err := time.Parse(time.RFC3339, _time)
+	if err != nil {
+		return defval
+	}
+	return t
+}
+
 // ParseTimeDesc 解析时间描述
 // now-1hour 最近1小时
 // now-1min 最近1分钟
@@ -184,7 +196,6 @@ func (f *WebForm) ParseTimeDesc(timestr string, defval string) string {
 		return time.Now().Format(time.RFC3339)
 	}
 }
-
 
 type PageResult struct {
 	TotalCount int64       `json:"total_count,omitempty"`
@@ -366,4 +377,21 @@ func ParseEqualMap(c echo.Context) map[string]string {
 		}
 	}
 	return filtermap
+}
+
+func AutoInterval(start, end time.Time) string {
+	hours := end.Sub(start).Hours()
+	if hours <= 8 {
+		return "2 minutes"
+	}
+	if hours <= 24 {
+		return "5 minutes"
+	}
+	if hours <= 24*3 {
+		return "10 minutes"
+	}
+	if hours <= 24*7 {
+		return "30 minutes"
+	}
+	return "1 hours"
 }

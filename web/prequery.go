@@ -15,10 +15,11 @@ type PreQuery struct {
 	timeField        string
 	equalFieldds     []string
 	keyfilterFieldds []string
+	params           map[string]interface{}
 }
 
 func NewPreQuery(c echo.Context) *PreQuery {
-	return &PreQuery{context: c}
+	return &PreQuery{context: c, params: make(map[string]interface{})}
 }
 
 func (p *PreQuery) DefaultOrderBy(fd string) *PreQuery {
@@ -45,6 +46,11 @@ func (p *PreQuery) KeyFields(fd ...string) *PreQuery {
 	return p
 }
 
+func (p *PreQuery) SetParam(key string, value interface{}) *PreQuery {
+	p.params[key] = value
+	return p
+}
+
 func (p *PreQuery) Query(query *gorm.DB) *gorm.DB {
 	if len(ParseSortMap(p.context)) == 0 {
 		query = query.Order(p.defaultOrderby)
@@ -65,11 +71,21 @@ func (p *PreQuery) Query(query *gorm.DB) *gorm.DB {
 		if common.IsEmptyOrNA(value) {
 			continue
 		}
+		if _, ok := p.params[name]; ok {
+			continue
+		}
+		query = query.Where(fmt.Sprintf("%s = ?", name), value)
+	}
+
+	for name, value := range p.params {
 		query = query.Where(fmt.Sprintf("%s = ?", name), value)
 	}
 
 	for name, value := range ParseFilterMap(p.context) {
 		if common.IsEmptyOrNA(value) {
+			continue
+		}
+		if _, ok := p.params[name]; ok {
 			continue
 		}
 		if common.InSlice(name, p.equalFieldds) {
@@ -78,6 +94,7 @@ func (p *PreQuery) Query(query *gorm.DB) *gorm.DB {
 			query = query.Where(fmt.Sprintf("%s like ?", name), "%"+value+"%")
 		}
 	}
+
 	keyword := p.context.QueryParam("keyword")
 	if keyword != "" {
 		for i, keyfd := range p.keyfilterFieldds {
